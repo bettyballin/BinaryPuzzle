@@ -25,13 +25,7 @@ export default function HintCell({ hint, direction }: HintCellProps) {
 
   return (
     <div
-      className={cn(
-        "w-8 h-8 flex items-center justify-center text-lg font-bold rounded",
-        {
-          "text-green-600 bg-green-50": hint === 'same',
-          "text-red-600 bg-red-50": hint === 'different',
-        }
-      )}
+      className="w-8 h-8 flex items-center justify-center text-lg font-bold rounded text-black bg-gray-100"
       title={`Hint: Adjacent cells should be ${hint}`}
     >
       {getSymbol()}

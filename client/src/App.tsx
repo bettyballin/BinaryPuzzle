@@ -16,13 +16,13 @@ function GameApp() {
 
   if (showInstructions) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-4 flex items-center justify-center">
-        <Card className="w-full max-w-md">
+      <div className="min-h-screen bg-white p-4 flex items-center justify-center">
+        <Card className="w-full max-w-md border-2 border-black">
           <CardContent className="p-6">
-            <h1 className="text-2xl font-bold text-center mb-4 text-gray-800">
+            <h1 className="text-2xl font-bold text-center mb-4 text-black">
               Sun & Moon Puzzle
             </h1>
-            <div className="space-y-3 text-sm text-gray-600">
+            <div className="space-y-3 text-sm text-black">
               <p><strong>Rules:</strong></p>
               <ul className="space-y-2 pl-4">
                 <li>• Each row and column must have exactly 3 suns ☀️ and 3 moons 🌙</li>
@@ -30,13 +30,13 @@ function GameApp() {
                 <li>• "=" hints mean adjacent cells should be the same</li>
                 <li>• "×" hints mean adjacent cells should be different</li>
               </ul>
-              <p className="text-xs text-gray-500 mt-4">
+              <p className="text-xs text-gray-700 mt-4">
                 Click cells to cycle: Empty → Sun → Moon → Empty
               </p>
             </div>
             <Button 
               onClick={() => setShowInstructions(false)}
-              className="w-full mt-6"
+              className="w-full mt-6 bg-black text-white hover:bg-gray-800"
             >
               Start Playing
             </Button>

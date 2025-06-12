@@ -47,23 +47,7 @@ export default function GameGrid() {
           })
         )).flat()}
         
-        {/* Vertical hints row */}
-        <div className="col-span-11 grid grid-cols-11 gap-1 mt-1">
-          {Array.from({ length: 11 }, (_, col) => {
-            if (col % 2 === 0) {
-              const cellCol = col / 2;
-              const hint = hints.vertical[cellCol];
-              return (
-                <HintCell
-                  key={`v-${col}`}
-                  hint={hint}
-                  direction="vertical"
-                />
-              );
-            }
-            return <div key={`v-${col}`} className="w-8 h-8" />;
-          })}
-        </div>
+
       </div>
     </Card>
   );
