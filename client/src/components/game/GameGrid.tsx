@@ -8,7 +8,7 @@ export default function GameGrid() {
 
   return (
     <Card className="p-4 border-2 border-black">
-      <div className="grid grid-cols-11 gap-1 w-fit mx-auto">
+      <div className="grid grid-cols-11 gap-0 w-fit mx-auto items-center">
         {/* Grid rendering with hints interspersed */}
         {Array.from({ length: 6 }, (_, row) => (
           Array.from({ length: 11 }, (_, col) => {

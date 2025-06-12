@@ -14,7 +14,7 @@ export default function GameCell({ value, onClick, hasViolation }: GameCellProps
       case 'sun':
         return '☀️';
       case 'moon':
-        return '🌙';
+        return <span className="text-blue-600">🌙</span>;
       default:
         return '';
     }
