@@ -183,27 +183,41 @@ export function validatePuzzle(
   return { violations, isComplete };
 }
 
+export function generatePuzzle(): {
+  grid: CellValue[][];
+  hints: { horizontal: (HintValue | null)[][]; vertical: (HintValue | null)[] };
+} {
+  // Create a puzzle with strategic initial placements - like a real logic puzzle
+  const grid: CellValue[][] = [
+    ['empty', 'empty', 'empty', 'sun', 'empty', 'empty'],
+    ['moon', 'empty', 'empty', 'empty', 'empty', 'empty'],
+    ['empty', 'empty', 'empty', 'empty', 'moon', 'empty'],
+    ['empty', 'sun', 'empty', 'empty', 'empty', 'empty'],
+    ['empty', 'empty', 'empty', 'empty', 'empty', 'sun'],
+    ['empty', 'empty', 'moon', 'empty', 'empty', 'empty']
+  ];
+  
+  // Create strategic hints to guide the puzzle solving
+  const horizontal: (HintValue | null)[][] = [
+    [null, 'different', 'different', null, null],
+    [null, null, 'same', null, 'different'],
+    ['different', null, null, 'different', null],
+    ['different', null, 'different', null, null],
+    [null, 'different', null, null, 'different'],
+    [null, 'different', null, 'same', null]
+  ];
+  
+  const vertical: (HintValue | null)[] = [
+    'different', null, 'different', null, 'same', null
+  ];
+  
+  return { grid, hints: { horizontal, vertical } };
+}
+
 export function generateHints(): { 
   horizontal: (HintValue | null)[][]; 
   vertical: (HintValue | null)[] 
 } {
-  // Generate some sample hints for demonstration
-  // In a real game, these would be part of the puzzle design
-  const horizontal: (HintValue | null)[][] = Array(6).fill(null).map(() => 
-    Array(5).fill(null).map(() => {
-      const rand = Math.random();
-      if (rand < 0.3) return 'same';
-      if (rand < 0.5) return 'different';
-      return null;
-    })
-  );
-  
-  const vertical: (HintValue | null)[] = Array(6).fill(null).map(() => {
-    const rand = Math.random();
-    if (rand < 0.2) return 'same';
-    if (rand < 0.35) return 'different';
-    return null;
-  });
-  
-  return { horizontal, vertical };
+  const puzzle = generatePuzzle();
+  return puzzle.hints;
 }

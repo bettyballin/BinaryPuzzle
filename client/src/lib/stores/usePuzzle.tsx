@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { CellValue } from "../../components/game/GameCell";
 import { HintValue } from "../../components/game/HintCell";
-import { validatePuzzle, generateHints, Violation } from "../puzzleLogic";
+import { validatePuzzle, generatePuzzle, Violation } from "../puzzleLogic";
 
 interface PuzzleState {
   grid: CellValue[][];
@@ -19,9 +19,11 @@ interface PuzzleState {
 const createEmptyGrid = (): CellValue[][] => 
   Array(6).fill(null).map(() => Array(6).fill('empty'));
 
+const initialPuzzle = generatePuzzle();
+
 export const usePuzzle = create<PuzzleState>((set, get) => ({
-  grid: createEmptyGrid(),
-  hints: generateHints(),
+  grid: initialPuzzle.grid,
+  hints: initialPuzzle.hints,
   violations: [],
   isComplete: false,
   
@@ -53,9 +55,10 @@ export const usePuzzle = create<PuzzleState>((set, get) => ({
   },
   
   reset: () => {
+    const newPuzzle = generatePuzzle();
     set({
-      grid: createEmptyGrid(),
-      hints: generateHints(),
+      grid: newPuzzle.grid,
+      hints: newPuzzle.hints,
       violations: [],
       isComplete: false,
     });
