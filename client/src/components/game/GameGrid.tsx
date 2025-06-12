@@ -7,7 +7,7 @@ export default function GameGrid() {
   const { grid, hints, updateCell, violations } = usePuzzle();
 
   return (
-    <Card className="p-4">
+    <Card className="p-4 border-2 border-black">
       <div className="grid grid-cols-11 gap-1 w-fit mx-auto">
         {/* Grid rendering with hints interspersed */}
         {Array.from({ length: 6 }, (_, row) => (

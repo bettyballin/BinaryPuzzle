@@ -47,7 +47,7 @@ function GameApp() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-4">
+    <div className="min-h-screen bg-white p-4">
       <div className="max-w-4xl mx-auto">
         <GameHeader />
         
@@ -58,27 +58,27 @@ function GameApp() {
             <Button 
               onClick={reset}
               variant="outline"
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 border-black text-black hover:bg-gray-100"
             >
               <RotateCcw className="w-4 h-4" />
               Reset
             </Button>
             
             {violations.length > 0 && (
-              <div className="text-sm text-red-600 bg-red-50 px-3 py-1 rounded">
+              <div className="text-sm text-red-600 bg-red-50 px-3 py-1 rounded border border-red-200">
                 {violations.length} constraint violation(s)
               </div>
             )}
           </div>
           
           {isComplete && (
-            <Card className="w-full max-w-sm">
+            <Card className="w-full max-w-sm border-2 border-black">
               <CardContent className="p-4 text-center">
-                <Trophy className="w-8 h-8 text-yellow-500 mx-auto mb-2" />
-                <h3 className="text-lg font-semibold text-green-700">
+                <Trophy className="w-8 h-8 text-black mx-auto mb-2" />
+                <h3 className="text-lg font-semibold text-black">
                   Puzzle Complete!
                 </h3>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-700">
                   Great job solving the puzzle!
                 </p>
               </CardContent>
