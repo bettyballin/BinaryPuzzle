@@ -158,13 +158,92 @@ export function validatePuzzle(
   return { violations, isComplete };
 }
 
-export function generatePuzzle(): {
-  grid: CellValue[][];
-  hints: { horizontal: (HintValue | null)[][]; vertical: (HintValue | null)[] };
-  solution: CellValue[][];
-} {
-  // Complete solution grid
-  const solution: CellValue[][] = [
+function shuffle<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+function generateValidRow(): CellValue[] {
+  // Generate a valid row with exactly 3 suns and 3 moons, no 3+ consecutive
+  const attempts = 1000;
+  
+  for (let attempt = 0; attempt < attempts; attempt++) {
+    const row = shuffle(['sun', 'sun', 'sun', 'moon', 'moon', 'moon'] as CellValue[]);
+    
+    // Check for no more than 2 consecutive
+    let hasThreeConsecutive = false;
+    for (let i = 0; i < 4; i++) {
+      if (row[i] === row[i + 1] && row[i] === row[i + 2]) {
+        hasThreeConsecutive = true;
+        break;
+      }
+    }
+    
+    if (!hasThreeConsecutive) {
+      return row;
+    }
+  }
+  
+  // Fallback pattern if random generation fails
+  return ['sun', 'moon', 'sun', 'moon', 'sun', 'moon'];
+}
+
+function isValidGrid(grid: CellValue[][]): boolean {
+  // Check each row has exactly 3 suns and 3 moons
+  for (let row = 0; row < 6; row++) {
+    const sunCount = grid[row].filter(cell => cell === 'sun').length;
+    const moonCount = grid[row].filter(cell => cell === 'moon').length;
+    if (sunCount !== 3 || moonCount !== 3) return false;
+    
+    // Check no 3+ consecutive in row
+    for (let col = 0; col < 4; col++) {
+      if (grid[row][col] === grid[row][col + 1] && 
+          grid[row][col] === grid[row][col + 2]) {
+        return false;
+      }
+    }
+  }
+  
+  // Check each column has exactly 3 suns and 3 moons
+  for (let col = 0; col < 6; col++) {
+    const sunCount = grid.map(row => row[col]).filter(cell => cell === 'sun').length;
+    const moonCount = grid.map(row => row[col]).filter(cell => cell === 'moon').length;
+    if (sunCount !== 3 || moonCount !== 3) return false;
+    
+    // Check no 3+ consecutive in column
+    for (let row = 0; row < 4; row++) {
+      if (grid[row][col] === grid[row + 1][col] && 
+          grid[row][col] === grid[row + 2][col]) {
+        return false;
+      }
+    }
+  }
+  
+  return true;
+}
+
+function generateRandomSolution(): CellValue[][] {
+  const maxAttempts = 1000;
+  
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    const grid: CellValue[][] = [];
+    
+    // Generate rows one by one
+    for (let row = 0; row < 6; row++) {
+      grid[row] = generateValidRow();
+    }
+    
+    if (isValidGrid(grid)) {
+      return grid;
+    }
+  }
+  
+  // Fallback to alternating pattern if random generation fails
+  return [
     ['moon', 'sun', 'moon', 'sun', 'moon', 'sun'],
     ['sun', 'moon', 'sun', 'moon', 'sun', 'moon'],
     ['moon', 'sun', 'moon', 'sun', 'moon', 'sun'],
@@ -172,26 +251,48 @@ export function generatePuzzle(): {
     ['moon', 'sun', 'moon', 'sun', 'moon', 'sun'],
     ['sun', 'moon', 'sun', 'moon', 'sun', 'moon']
   ];
+}
+
+export function generatePuzzle(): {
+  grid: CellValue[][];
+  hints: { horizontal: (HintValue | null)[][]; vertical: (HintValue | null)[] };
+  solution: CellValue[][];
+} {
+  // Generate a random valid solution
+  const solution = generateRandomSolution();
   
-  // Starting grid with strategic placements that guarantee unique solution
-  const grid: CellValue[][] = [
-    ['empty', 'empty', 'empty', 'sun', 'empty', 'empty'],
-    ['empty', 'empty', 'empty', 'empty', 'empty', 'empty'],
-    ['empty', 'empty', 'empty', 'empty', 'moon', 'empty'],
-    ['empty', 'moon', 'empty', 'empty', 'empty', 'empty'],
-    ['empty', 'empty', 'empty', 'empty', 'empty', 'sun'],
-    ['empty', 'empty', 'moon', 'empty', 'empty', 'empty']
-  ];
+  // Create starting grid with some cells filled strategically
+  const grid: CellValue[][] = Array(6).fill(null).map(() => Array(6).fill('empty'));
   
-  // Hints derived from the solution to guide solving
-  const horizontal: (HintValue | null)[][] = [
-    ['different', null, 'different', 'different', 'different'],
-    ['different', 'different', 'different', 'different', 'different'],
-    ['different', null, 'different', 'different', null],
-    ['different', 'different', 'different', 'different', 'different'],
-    ['different', null, 'different', 'different', 'different'],
-    ['different', 'different', 'different', 'different', 'different']
-  ];
+  // Place some strategic starting cells (about 15-20% filled)
+  const cellsToFill = Math.floor(Math.random() * 8) + 6; // 6-13 cells
+  const positions = [];
+  for (let row = 0; row < 6; row++) {
+    for (let col = 0; col < 6; col++) {
+      positions.push([row, col]);
+    }
+  }
+  
+  const selectedPositions = shuffle(positions).slice(0, cellsToFill);
+  selectedPositions.forEach(([row, col]) => {
+    grid[row][col] = solution[row][col];
+  });
+  
+  // Generate hints based on solution
+  const horizontal: (HintValue | null)[][] = [];
+  for (let row = 0; row < 6; row++) {
+    horizontal[row] = [];
+    for (let col = 0; col < 5; col++) {
+      // Randomly decide whether to show a hint (about 60% chance)
+      if (Math.random() < 0.6) {
+        const leftCell = solution[row][col];
+        const rightCell = solution[row][col + 1];
+        horizontal[row][col] = leftCell === rightCell ? 'same' : 'different';
+      } else {
+        horizontal[row][col] = null;
+      }
+    }
+  }
   
   const vertical: (HintValue | null)[] = [null, null, null, null, null, null];
   

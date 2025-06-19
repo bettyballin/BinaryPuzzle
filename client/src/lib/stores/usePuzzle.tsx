@@ -13,7 +13,7 @@ interface PuzzleState {
   violations: Violation[];
   isComplete: boolean;
   
-  updateCell: (row: number, col: number) => void;
+  updateCell: (row: number, col: number, forcedValue?: CellValue) => void;
   reset: () => void;
   getNextHint: () => { row: number; col: number; value: CellValue } | null;
 }
