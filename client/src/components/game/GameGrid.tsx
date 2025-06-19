@@ -30,19 +30,20 @@ export default function GameGrid() {
           )}
         </div>
         
-        {/* Horizontal hints positioned absolutely between cells */}
+        {/* Horizontal hints positioned between cells */}
         {Array.from({ length: 6 }, (_, row) => 
           Array.from({ length: 5 }, (_, hintCol) => {
             const hint = hints.horizontal[row]?.[hintCol];
             if (!hint) return null;
             
-            const leftPosition = (hintCol + 1) * 56 - 2; // 48px cell + 8px gap - 2px to center 4px hint
-            const topPosition = row * 56 + 22; // 48px cell height + 8px gap, centered vertically
+            // Calculate position: after the left cell + center in the 8px gap
+            const leftPosition = 48 + hintCol * 56 + 2; // 48px cell + gap center (4px) - hint center (2px)
+            const topPosition = row * 56 + 22; // Center in cell height
             
             return (
               <div
                 key={`h-${row}-${hintCol}`}
-                className="absolute"
+                className="absolute z-10"
                 style={{
                   left: `${leftPosition}px`,
                   top: `${topPosition}px`,
