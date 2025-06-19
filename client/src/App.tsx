@@ -65,7 +65,10 @@ function GameApp() {
             <Button 
               onClick={reset}
               variant="outline"
-              className="flex items-center gap-2 border-black text-black hover:bg-gray-100"
+              className="flex items-center gap-2 border-2 border-black text-black hover:bg-gray-100 transform transition-all duration-200 hover:scale-105 hover:shadow-lg"
+              style={{
+                boxShadow: '0 4px 12px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.8)'
+              }}
             >
               <RotateCcw className="w-4 h-4" />
               Reset
@@ -74,31 +77,59 @@ function GameApp() {
             <Button 
               onClick={handleHint}
               variant="outline"
-              className="flex items-center gap-2 border-black text-black hover:bg-gray-100"
+              className="flex items-center gap-2 border-2 border-black text-black hover:bg-gray-100 transform transition-all duration-200 hover:scale-105 hover:shadow-lg"
+              style={{
+                boxShadow: '0 4px 12px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.8)'
+              }}
             >
               <Lightbulb className="w-4 h-4" />
               Hint
             </Button>
             
             {violations.length > 0 && (
-              <div className="text-sm text-red-600 bg-red-50 px-3 py-1 rounded border border-red-200">
+              <div 
+                className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg border border-red-200 transform transition-all duration-200"
+                style={{
+                  boxShadow: '0 2px 8px rgba(239, 68, 68, 0.2), inset 0 1px 0 rgba(255,255,255,0.8)'
+                }}
+              >
                 {violations.length} constraint violation(s)
               </div>
             )}
           </div>
           
           {isComplete && (
-            <Card className="w-full max-w-sm border-2 border-black">
-              <CardContent className="p-4 text-center">
-                <Trophy className="w-8 h-8 text-black mx-auto mb-2" />
-                <h3 className="text-lg font-semibold text-black">
-                  Puzzle Complete!
-                </h3>
-                <p className="text-sm text-gray-700">
-                  Great job solving the puzzle!
-                </p>
-              </CardContent>
-            </Card>
+            <div className="relative w-full max-w-sm">
+              {/* 3D Base for completion card */}
+              <div 
+                className="absolute inset-0 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-xl transform translate-y-1 translate-x-1"
+                style={{ filter: 'blur(1px)' }}
+              />
+              
+              <Card 
+                className="relative border-2 border-black bg-gradient-to-br from-yellow-100 to-yellow-50 transform transition-all duration-500 animate-pulse"
+                style={{
+                  boxShadow: '0 8px 25px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.9)'
+                }}
+              >
+                <CardContent className="p-6 text-center">
+                  <div 
+                    className="w-12 h-12 bg-yellow-500 rounded-full mx-auto mb-4 flex items-center justify-center transform transition-all duration-200 hover:scale-110"
+                    style={{
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,0.4)'
+                    }}
+                  >
+                    <Trophy className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-black mb-2">
+                    Puzzle Complete!
+                  </h3>
+                  <p className="text-sm text-gray-700">
+                    Great job solving the puzzle!
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
           )}
         </div>
       </div>
