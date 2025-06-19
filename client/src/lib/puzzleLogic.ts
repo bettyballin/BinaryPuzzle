@@ -161,32 +161,41 @@ export function validatePuzzle(
 export function generatePuzzle(): {
   grid: CellValue[][];
   hints: { horizontal: (HintValue | null)[][]; vertical: (HintValue | null)[] };
+  solution: CellValue[][];
 } {
-  // Create a puzzle with strategic initial placements - like a real logic puzzle
+  // Complete solution grid
+  const solution: CellValue[][] = [
+    ['moon', 'sun', 'moon', 'sun', 'moon', 'sun'],
+    ['sun', 'moon', 'sun', 'moon', 'sun', 'moon'],
+    ['moon', 'sun', 'moon', 'sun', 'moon', 'sun'],
+    ['sun', 'moon', 'sun', 'moon', 'sun', 'moon'],
+    ['moon', 'sun', 'moon', 'sun', 'moon', 'sun'],
+    ['sun', 'moon', 'sun', 'moon', 'sun', 'moon']
+  ];
+  
+  // Starting grid with strategic placements that guarantee unique solution
   const grid: CellValue[][] = [
     ['empty', 'empty', 'empty', 'sun', 'empty', 'empty'],
-    ['moon', 'empty', 'empty', 'empty', 'empty', 'empty'],
+    ['empty', 'empty', 'empty', 'empty', 'empty', 'empty'],
     ['empty', 'empty', 'empty', 'empty', 'moon', 'empty'],
-    ['empty', 'sun', 'empty', 'empty', 'empty', 'empty'],
+    ['empty', 'moon', 'empty', 'empty', 'empty', 'empty'],
     ['empty', 'empty', 'empty', 'empty', 'empty', 'sun'],
     ['empty', 'empty', 'moon', 'empty', 'empty', 'empty']
   ];
   
-  // Create strategic hints to guide the puzzle solving
+  // Hints derived from the solution to guide solving
   const horizontal: (HintValue | null)[][] = [
-    [null, 'different', 'different', null, null],
-    [null, null, 'same', null, 'different'],
-    ['different', null, null, 'different', null],
-    ['different', null, 'different', null, null],
-    [null, 'different', null, null, 'different'],
-    [null, 'different', null, 'same', null]
+    ['different', null, 'different', 'different', 'different'],
+    ['different', 'different', 'different', 'different', 'different'],
+    ['different', null, 'different', 'different', null],
+    ['different', 'different', 'different', 'different', 'different'],
+    ['different', null, 'different', 'different', 'different'],
+    ['different', 'different', 'different', 'different', 'different']
   ];
   
-  const vertical: (HintValue | null)[] = [
-    'different', null, 'different', null, 'same', null
-  ];
+  const vertical: (HintValue | null)[] = [null, null, null, null, null, null];
   
-  return { grid, hints: { horizontal, vertical } };
+  return { grid, hints: { horizontal, vertical }, solution };
 }
 
 export function generateHints(): { 

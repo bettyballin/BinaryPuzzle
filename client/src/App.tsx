@@ -5,14 +5,21 @@ import GameHeader from "./components/game/GameHeader";
 import { usePuzzle } from "./lib/stores/usePuzzle";
 import { Button } from "./components/ui/button";
 import { Card, CardContent } from "./components/ui/card";
-import { RotateCcw, Trophy } from "lucide-react";
+import { RotateCcw, Trophy, Lightbulb } from "lucide-react";
 import "@fontsource/inter";
 
 const queryClient = new QueryClient();
 
 function GameApp() {
-  const { isComplete, reset, violations } = usePuzzle();
+  const { isComplete, reset, violations, getNextHint, updateCell } = usePuzzle();
   const [showInstructions, setShowInstructions] = useState(true);
+
+  const handleHint = () => {
+    const hint = getNextHint();
+    if (hint) {
+      updateCell(hint.row, hint.col, hint.value);
+    }
+  };
 
   if (showInstructions) {
     return (
@@ -54,7 +61,7 @@ function GameApp() {
         <div className="flex flex-col items-center space-y-6">
           <GameGrid />
           
-          <div className="flex gap-4 items-center">
+          <div className="flex gap-4 items-center flex-wrap justify-center">
             <Button 
               onClick={reset}
               variant="outline"
@@ -62,6 +69,15 @@ function GameApp() {
             >
               <RotateCcw className="w-4 h-4" />
               Reset
+            </Button>
+            
+            <Button 
+              onClick={handleHint}
+              variant="outline"
+              className="flex items-center gap-2 border-black text-black hover:bg-gray-100"
+            >
+              <Lightbulb className="w-4 h-4" />
+              Hint
             </Button>
             
             {violations.length > 0 && (
