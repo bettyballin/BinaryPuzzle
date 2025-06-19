@@ -137,32 +137,7 @@ export function validatePuzzle(
     }
   }
   
-  // Check vertical hints
-  for (let col = 0; col < 6; col++) {
-    const hint = hints.vertical[col];
-    if (hint && grid[5][col] !== 'empty' && col < 5 && grid[5][col + 1] !== 'empty') {
-      const topCell = grid[5][col];
-      const bottomCell = grid[5][col + 1];
-      
-      if (hint === 'same' && topCell !== bottomCell) {
-        violations.push({
-          type: 'hint',
-          row: 5,
-          col,
-          message: `Vertical hint violated: cells should be same`
-        });
-      }
-      
-      if (hint === 'different' && topCell === bottomCell) {
-        violations.push({
-          type: 'hint',
-          row: 5,
-          col,
-          message: `Vertical hint violated: cells should be different`
-        });
-      }
-    }
-  }
+  // Check vertical hints (these don't exist in this puzzle type, removing faulty logic)
   
   // Mark cells with violations
   violations.forEach(violation => {
