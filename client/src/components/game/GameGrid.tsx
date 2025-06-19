@@ -8,46 +8,51 @@ export default function GameGrid() {
 
   return (
     <Card className="p-4 border-2 border-black">
-      <div className="grid grid-cols-11 gap-0 w-fit mx-auto items-center">
-        {/* Grid rendering with hints interspersed */}
-        {Array.from({ length: 6 }, (_, row) => (
-          Array.from({ length: 11 }, (_, col) => {
-            const key = `${row}-${col}`;
-            
-            // Even columns are game cells, odd columns are hints
-            if (col % 2 === 0) {
-              const cellCol = col / 2;
-              const cellValue = grid[row][cellCol];
+      <div className="relative w-fit mx-auto">
+        {/* Main 6x6 grid of cells */}
+        <div className="grid grid-cols-6 gap-2">
+          {Array.from({ length: 6 }, (_, row) => 
+            Array.from({ length: 6 }, (_, col) => {
+              const cellValue = grid[row][col];
               const hasViolation = violations.some(v => 
-                v.type === 'cell' && v.row === row && v.col === cellCol
+                v.type === 'cell' && v.row === row && v.col === col
               );
               
               return (
                 <GameCell
-                  key={key}
+                  key={`${row}-${col}`}
                   value={cellValue}
-                  onClick={() => updateCell(row, cellCol)}
+                  onClick={() => updateCell(row, col)}
                   hasViolation={hasViolation}
                 />
               );
-            } else {
-              const hintCol = Math.floor(col / 2);
-              if (hintCol < 5) {
-                const hint = hints.horizontal[row]?.[hintCol];
-                return (
-                  <HintCell
-                    key={key}
-                    hint={hint}
-                    direction="horizontal"
-                  />
-                );
-              }
-              return <div key={key} className="w-8 h-8" />;
-            }
-          })
-        )).flat()}
+            })
+          )}
+        </div>
         
-
+        {/* Horizontal hints positioned absolutely between cells */}
+        {Array.from({ length: 6 }, (_, row) => 
+          Array.from({ length: 5 }, (_, hintCol) => {
+            const hint = hints.horizontal[row]?.[hintCol];
+            if (!hint) return null;
+            
+            const leftPosition = (hintCol + 1) * 56 - 2; // 48px cell + 8px gap - 2px to center 4px hint
+            const topPosition = row * 56 + 22; // 48px cell height + 8px gap, centered vertically
+            
+            return (
+              <div
+                key={`h-${row}-${hintCol}`}
+                className="absolute"
+                style={{
+                  left: `${leftPosition}px`,
+                  top: `${topPosition}px`,
+                }}
+              >
+                <HintCell hint={hint} direction="horizontal" />
+              </div>
+            );
+          })
+        )}
       </div>
     </Card>
   );

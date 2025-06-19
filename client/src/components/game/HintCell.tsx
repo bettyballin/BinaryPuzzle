@@ -20,12 +20,12 @@ export default function HintCell({ hint, direction }: HintCellProps) {
   };
 
   if (!hint) {
-    return <div className="w-4 h-12" />;
+    return null;
   }
 
   return (
     <div
-      className="w-4 h-12 flex items-center justify-center text-xs font-bold text-black bg-gray-200 rounded-sm"
+      className="w-4 h-4 flex items-center justify-center text-xs font-bold text-black bg-gray-200 rounded-sm"
       title={`Hint: Adjacent cells should be ${hint}`}
     >
       {getSymbol()}
